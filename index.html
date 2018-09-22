@@ -24,14 +24,12 @@
             <h4>ACEHUB</h4>
         </div>
         <div class="ten columns">
-            <p>This is a Acestream aggregator form reddit sport forums, this will make your tablet phone / TV acestream experience
-                much better without the need to copy long stream ids.</p>
-            <small>Streams will appear a soon as matches are about to start. (this site auto-updates every 5 min)</small>
+
         </div>
     </div>
     <br>
     <!-- columns should be the immediate child of a .row -->
-    <div v-if="ready" v-for="match in matches">
+    <div v-if="ready" v-for="(match, index) in matches">
         <div class="row">
             <div class="two columns"><h5>{{ match.kickoff | displayTime }}</h5></div>
             <div class="six columns">
@@ -47,11 +45,25 @@
 
             </div>
         </div>
-        <hr>
+        <hr v-if="index < matches.length - 1">
     </div>
 
     <div v-if="ready && matches.length == 0" style="text-align: center">
         <h4>There are no matches being streamed right now :(</h4>
+    </div>
+
+    <br><br><br><br><br><br>
+    <hr>
+
+    <div class="row">
+      <div class="twelve columns">
+      <p>Acehub is a aggregator of P2P (acestreams) sport streams, acestream is a P2P video technology based on BitTorrent protocol
+      available for many different OS's like Windows, Linux and Android (also TV version). Download <a target="_blank" href="http://www.acestream.org/">over here</a>.</p>
+
+      <p>Acehub aggregates streams present in different sites namely reddit sport streams subreddits, contribute to the project
+      aggregating streams from other provenience. Visit at <a target="_blank" href="https://github.com/IvoGuerreiro/acehub">Github</a></p>
+
+      </div>
     </div>
 
 
@@ -67,11 +79,12 @@
         data: {
             matches: [],
             last_update: null,
-            ready: false
+            ready: false,
+            endpoint: 'http://api.acehub.online' //Change for testing
         },
         methods: {
             updateMatches: function() {
-                axios.get('APIENDPOINT/matches')
+                axios.get(this.endpoint + '/matches')
                     .then(function (response) {
                         // handle success
                         console.log(response);
